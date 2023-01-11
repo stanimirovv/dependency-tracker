@@ -1,0 +1,31 @@
+{
+  "name": "@stanimirovv/dependency-tracker",
+  "version": "1.0.6",
+  "description": "A tiny, light weight, and zero dependency script that counts how many versions behind the project is from its dependencies.",
+  "main": "dist/index.js",
+  "bin": "./dist/index.js",
+  "scripts": {
+    "test": "npm run build && jest",
+    "start": "tsc -w",
+    "build": "tsc",
+    "lint": "eslint --ext .ts .",
+    "format": "prettier --check *.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/jest": "^29.2.5",
+    "@typescript-eslint/eslint-plugin": "^5.48.0",
+    "@typescript-eslint/parser": "^5.48.0",
+    "eslint": "^8.31.0",
+    "eslint-config-standard-with-typescript": "^26.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.6.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "jest": "^29.3.1",
+    "prettier": "2.8.2",
+    "ts-jest": "^29.0.3",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4"
+  }
+}
