@@ -25,6 +25,13 @@ Set `VERSIONS_BEHIND_THRESHOLD=0` to fail on any version behind.
 You can also skip major/minor/patch versions by setting the envvars `SKIP_MAJOR_VERSIONS=1` and `SKIP_MINOR_VERSIONS=1` and `SKIP_PATCH_VERSIONS=1`. 
 Skips dev/alpha/beta/rc versions.
 
+The script generates an overall `decay score` for the project.
+The dependency score is the sum of all dependency versions behind.
+1000 for major versions behind, 100 for minor and 1 for patch.
+Patch is considered less important as they are released significantly more often than major/minor versions.
+
+If for readability or scripting purposes you want the script to return only the decay score, you can use the envvar `ONLY_DECAY_SCORE=1`.
+
 ## Installation
 ```bash
 npm i @stanimirovv/dependency-tracker

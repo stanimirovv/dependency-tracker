@@ -10,9 +10,9 @@ describe("test dependency tracker", () => {
 
     expect(stdout).not.toBeNull();
     const parsedReport = JSON.parse(stdout);
-    expect(parsedReport.length > 0).toBe(true);
+    expect(parsedReport.report.length > 0).toBe(true);
 
-    const firstReport = parsedReport[0];
+    const firstReport = parsedReport.report[0];
     expect(firstReport.packageName).toBe("reflect-metadata");
     expect(firstReport.latestVersion > firstReport.currentVersion).toBe(true);
     expect(firstReport.versionsBehind > 0).toBe(true);
@@ -40,7 +40,7 @@ describe("test dependency tracker", () => {
     );
     expect(stdout).not.toBeNull();
     const parsedReport = JSON.parse(stdout);
-    expect(parsedReport.length > 0).toBe(true);
+    expect(parsedReport.report.length > 0).toBe(true);
   });
 
   it("should support skipping packages", async () => {
@@ -56,8 +56,17 @@ describe("test dependency tracker", () => {
       outputWithoutSkipPackages.stdout
     );
     const parsedReportWithSkip = JSON.parse(outputWithSkipPackages.stdout);
-    expect(parsedReportWithoutSkip.length).toEqual(
-      parsedReportWithSkip.length + 1
+    expect(parsedReportWithoutSkip.report.length).toEqual(
+      parsedReportWithSkip.report.length + 1
     );
+  });
+
+  it("print decay score", async () => {
+    const { stdout } = await exec(
+      "PRINT_DECAY_SCORE_ONLY=1 node ./dist/index.js package-lock.example.json"
+    );
+    expect(stdout).not.toBeNull();
+    const decayScore = parseInt(stdout);
+    expect(decayScore > 0).toBe(true);
   });
 });

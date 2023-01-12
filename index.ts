@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import calculateDecayScore from "./src/calculateDecayScore";
 import generateNpmViewPromises from "./src/generateNpmViewPromises";
 import generatePackageReport from "./src/generatePackageReport";
 import getDependenciesFromLockFile from "./src/getDependenciesFromLockFile";
@@ -32,7 +33,12 @@ Promise.all(packagesWithVersionsPromises).then((values) => {
     generatePackageReport(packageReport, reportConfig)
   );
 
-  console.log(JSON.stringify(report));
+  const decayScore = calculateDecayScore(report);
+  if (process.env.PRINT_DECAY_SCORE_ONLY) {
+    console.log(decayScore);
+  } else {
+    console.log(JSON.stringify({ decayScore, report }));
+  }
 
   const versionsBehindThreshold = parseInt(
     process.env.VERSIONS_BEHIND_THRESHOLD || "-1"
