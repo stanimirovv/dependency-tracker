@@ -10,9 +10,9 @@ describe("test dependency tracker", () => {
 
     expect(stdout).not.toBeNull();
     const parsedReport = JSON.parse(stdout);
-    expect(parsedReport.report.length > 0).toBe(true);
+    expect(parsedReport.packageReports.length > 0).toBe(true);
 
-    const firstReport = parsedReport.report[0];
+    const firstReport = parsedReport.packageReports[0];
     expect(firstReport.packageName).toBe("reflect-metadata");
     expect(firstReport.latestVersion > firstReport.currentVersion).toBe(true);
     expect(firstReport.versionsBehind > 0).toBe(true);
@@ -40,7 +40,7 @@ describe("test dependency tracker", () => {
     );
     expect(stdout).not.toBeNull();
     const parsedReport = JSON.parse(stdout);
-    expect(parsedReport.report.length > 0).toBe(true);
+    expect(parsedReport.packageReports.length > 0).toBe(true);
   });
 
   it("should support skipping packages", async () => {
@@ -56,8 +56,8 @@ describe("test dependency tracker", () => {
       outputWithoutSkipPackages.stdout
     );
     const parsedReportWithSkip = JSON.parse(outputWithSkipPackages.stdout);
-    expect(parsedReportWithoutSkip.report.length).toEqual(
-      parsedReportWithSkip.report.length + 1
+    expect(parsedReportWithoutSkip.packageReports.length).toEqual(
+      parsedReportWithSkip.packageReports.length + 1
     );
   });
 
@@ -68,5 +68,27 @@ describe("test dependency tracker", () => {
     expect(stdout).not.toBeNull();
     const decayScore = parseInt(stdout);
     expect(decayScore > 0).toBe(true);
+  });
+
+  it("should support decayScore threshold", async () => {
+    expect.assertions(3);
+    try {
+      const { stdout } = await exec(
+        "DECAY_THRESHOLD=10 node ./dist/index.js package-lock.example.json"
+      );
+    } catch (e: any) {
+      expect(e).toBeDefined();
+      expect(e.code).toBeDefined();
+      expect(e.code).toEqual(1);
+    }
+  });
+
+  it("should support versions behind threshold", async () => {
+    const { stdout } = await exec(
+      "DECAY_THRESHOLD=10000000 node ./dist/index.js package-lock.example.json"
+    );
+    expect(stdout).not.toBeNull();
+    const parsedReport = JSON.parse(stdout);
+    expect(parsedReport.packageReports.length > 0).toBe(true);
   });
 });

@@ -5,6 +5,7 @@ import generatePackageReport from "./src/generatePackageReport";
 import getDependenciesFromLockFile from "./src/getDependenciesFromLockFile";
 import shouldExit from "./src/shouldExit";
 import { PackageVersionReport } from "./src/types/packageVersionReport.type";
+import { Report } from "./src/types/report";
 import { ReportConfig } from "./src/types/reportConfig.type";
 
 // Parse the package lock file
@@ -29,21 +30,24 @@ const reportConfig: ReportConfig = {
 };
 
 Promise.all(packagesWithVersionsPromises).then((values) => {
-  const report: PackageVersionReport[] = values.map((packageReport) =>
+  const packageReports: PackageVersionReport[] = values.map((packageReport) =>
     generatePackageReport(packageReport, reportConfig)
   );
 
-  const decayScore = calculateDecayScore(report);
+  const decayScore = calculateDecayScore(packageReports);
+  const report: Report = { decayScore, packageReports };
   if (process.env.PRINT_DECAY_SCORE_ONLY) {
     console.log(decayScore);
   } else {
-    console.log(JSON.stringify({ decayScore, report }));
+    console.log(JSON.stringify(report));
   }
 
   const versionsBehindThreshold = parseInt(
     process.env.VERSIONS_BEHIND_THRESHOLD || "-1"
   );
-  if (shouldExit(report, versionsBehindThreshold)) {
+
+  const decayThreshold = parseInt(process.env.DECAY_THRESHOLD || "-1");
+  if (shouldExit(report, versionsBehindThreshold, decayThreshold)) {
     process.exit(1);
   } else {
     process.exit(0);

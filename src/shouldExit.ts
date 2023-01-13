@@ -1,10 +1,11 @@
-import { PackageVersionReport } from "./types/packageVersionReport.type";
+import { Report } from "./types/report";
 
 export default function shouldExit(
-  report: PackageVersionReport[],
-  versionsBehindThreshold: number
+  report: Report,
+  versionsBehindThreshold: number,
+  decayThreshold: number
 ) {
-  const totalVersionsBehind = report.reduce(
+  const totalVersionsBehind = report.packageReports.reduce(
     (total, packageReport) => packageReport.versionsBehind + total,
     0
   );
@@ -14,5 +15,9 @@ export default function shouldExit(
     (totalVersionsBehind > versionsBehindThreshold &&
       versionsBehindThreshold > 0);
 
-  return report.length > 0 && isTooManyVersionsBehind;
+  return (
+    report.packageReports.length > 0 &&
+    (isTooManyVersionsBehind ||
+      (report.decayScore > decayThreshold && decayThreshold > 0))
+  );
 }
