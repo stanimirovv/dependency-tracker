@@ -11,7 +11,7 @@
     "lint": "eslint --ext .ts .",
     "format": "prettier --check *.ts"
   },
-  "author": "stanimirovv",
+  "author": "Zlatin Stanimirov",
   "license": "ISC",
   "devDependencies": {
     "@types/jest": "^29.2.5",
