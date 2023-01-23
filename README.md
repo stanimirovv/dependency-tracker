@@ -30,7 +30,7 @@ The dependency score is the sum of all dependency versions behind.
 1000 for major versions behind, 100 for minor and 1 for patch.
 Patch is considered less important as they are released significantly more often than major/minor versions.
 
-If for readability or scripting purposes you want the script to return only the decay score, you can use the envvar `ONLY_DECAY_SCORE=1`.
+If for readability or scripting purposes you want the script to return only the decay score, you can use the envvar `ONLY_DECAY=1`.
 You can also use `DECAY_THRESHOLD=<max decay score int>` to set a threshold for the decay score and have the script return a non 0 exit status if the decay score is above the threshold.
 
 ## Installation

@@ -1,6 +1,6 @@
 {
   "name": "@stanimirovv/dependency-tracker",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "description": "A tiny, light weight, and zero dependency script that counts how many versions behind the project is from its dependencies.",
   "main": "dist/index.js",
   "bin": "./dist/index.js",

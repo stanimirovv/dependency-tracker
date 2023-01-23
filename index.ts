@@ -36,7 +36,7 @@ Promise.all(packagesWithVersionsPromises).then((values) => {
 
   const decayScore = calculateDecayScore(packageReports);
   const report: Report = { decayScore, packageReports };
-  if (process.env.PRINT_DECAY_SCORE_ONLY) {
+  if (process.env.ONLY_DECAY) {
     console.log(decayScore);
   } else {
     console.log(JSON.stringify(report));

@@ -63,7 +63,7 @@ describe("test dependency tracker", () => {
 
   it("print decay score", async () => {
     const { stdout } = await exec(
-      "PRINT_DECAY_SCORE_ONLY=1 node ./dist/index.js package-lock.example.json"
+      "ONLY_DECAY=1 node ./dist/index.js package-lock.example.json"
     );
     expect(stdout).not.toBeNull();
     const decayScore = parseInt(stdout);
