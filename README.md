@@ -1,6 +1,7 @@
+TODO: add TRACK_ONLY to allow to track only specific packages.
 # Dependency tracker
 
-A light weight, configurable, and zero dependency script that counts how many versions behind the project is from its dependencies.
+A light weight, configurable script that counts how many versions behind the project is from its dependencies.
 
 This is not a replacement for `npm outdated` 
 It offers similar functionality from a different angle. The goal is to be able to use this script as a validator for CI/CD pipelines.

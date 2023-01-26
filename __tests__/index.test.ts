@@ -91,4 +91,13 @@ describe("test dependency tracker", () => {
     const parsedReport = JSON.parse(stdout);
     expect(parsedReport.packageReports.length > 0).toBe(true);
   });
+
+  it("should support development dependencies and have default package-lock path", async () => {
+    const { stdout } = await exec(
+      "ADD_DEV_DEPENDENCIES=1 DECAY_THRESHOLD=10000000 node ./dist/index.js"
+    );
+    expect(stdout).not.toBeNull();
+    const parsedReport = JSON.parse(stdout);
+    expect(parsedReport.decayScore).not.toBeNull();
+  });
 });
