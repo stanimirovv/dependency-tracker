@@ -16,10 +16,7 @@ export default function generateNpmViewPromises(
         );
 
         // Clean up the package versions
-        const currentVersion = dependencies[packageName]
-          .replace("^", "")
-          .replace("~", "");
-
+        const currentVersion = dependencies[packageName];
         return {
           packageName,
           versions: JSON.parse(stdout),

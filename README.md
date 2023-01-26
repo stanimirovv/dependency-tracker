@@ -33,6 +33,9 @@ Patch is considered less important as they are released significantly more often
 If for readability or scripting purposes you want the script to return only the decay score, you can use the envvar `ONLY_DECAY=1`.
 You can also use `DECAY_THRESHOLD=<max decay score int>` to set a threshold for the decay score and have the script return a non 0 exit status if the decay score is above the threshold.
 
+By default only the prd dependencies are checked.
+You can also check dev dependencies by setting the envvar `CHECK_DEV_DEPENDENCIES=1`.
+
 ## Installation
 ```bash
 npm i @stanimirovv/dependency-tracker
@@ -44,6 +47,7 @@ Simple report:
 ```bash
 npx @stanimirovv/dependency-tracker /path/to/package-lock.json
 ```
+Note: default path is `./package-lock.json`
 
 Set status code to 1 if versions behind is more than 0:
 ```bash
@@ -59,3 +63,7 @@ Skip versions behind on typescript
 ```bash
 PACKAGES_TO_SKIP='["typescript"]' npx @stanimirovv/dependency-tracker /path/to/package-lock.json
 ```
+
+Have a max decay score of 10000 and skip minor versions:
+```bash
+DECAY_THRESHOLD=10000 SKIP_MINOR_VERSIONS=1 npx @stanimirovv/dependency-tracker /path/to/package-lock.json
