@@ -1,4 +1,4 @@
-import { shouldSkipVersion } from "./shouldSkipVersion";
+import { compareVersions } from "compare-versions";
 import { PackageVersionReport } from "./types/packageVersionReport.type";
 import { PackageWithVersions } from "./types/packageWithVersions.type";
 import { ReportConfig } from "./types/reportConfig.type";
@@ -14,28 +14,23 @@ export default function generatePackageReport(
   const versionsBehindArray = versions.filter((version: string) => {
     // extract versions
     const majorVersion = version.split(".")[0];
-    const minorVersion = version.split(".")[1];
-    const patchVersion = version.split(".")[2];
-
-    // skip dev, alpha, and beta versions
-    if (shouldSkipVersion(patchVersion)) {
-      return false;
-    }
+    const minorVersion = `${version.split(".")[0]}${version.split(".")[1]}`;
+    const patchVersion = version;
 
     // extract current versions
     const currentMajorVersion = currentVersion.split(".")[0];
-    const currentMinorVersion = currentVersion.split(".")[1];
-    const currentPatchVersion = currentVersion.split(".")[2];
+    const currentMinorVersion = `${currentVersion.split(".")[0]}${
+      currentVersion.split(".")[1]
+    }`;
+    const currentPatchVersion = currentVersion;
 
     // Calculate which versions are behind
-    const hasBiggerMajorVersion = majorVersion > currentMajorVersion;
+    const hasBiggerMajorVersion =
+      compareVersions(majorVersion, currentMajorVersion) === 1;
     const hasBiggerMinorVersion =
-      majorVersion === currentMajorVersion &&
-      minorVersion > currentMinorVersion;
+      compareVersions(minorVersion, currentMinorVersion) === 1;
     const hasBiggerPatchVersion =
-      majorVersion === currentMajorVersion &&
-      minorVersion === currentMinorVersion &&
-      patchVersion > currentPatchVersion;
+      compareVersions(patchVersion, currentPatchVersion) === 1;
 
     // Increment the versions behind
     if (hasBiggerMajorVersion && !reportConfig.skipMajorVersions) {
@@ -53,7 +48,8 @@ export default function generatePackageReport(
     return version > currentVersion;
   });
 
-  const latestVersion = versionsBehindArray[0];
+  const latestVersion =
+    versionsBehindArray.length > 0 ? versionsBehindArray[0] : currentVersion;
   const versionsBehind =
     minorVersionsBehind + patchVersionsBehind + majorVersionsBehind;
 
