@@ -100,4 +100,14 @@ describe("test dependency tracker", () => {
     const parsedReport = JSON.parse(stdout);
     expect(parsedReport.decayScore).not.toBeNull();
   });
+
+  it("should test PACKAGES_TO_TRACK option", async () => {
+    const { stdout } = await exec(
+      `PACKAGES_TO_TRACK='["typescript"]' node ./dist/index.js package-lock.example.json`
+    );
+
+    expect(stdout).not.toBeNull();
+    const parsedReport = JSON.parse(stdout);
+    expect(parsedReport.packageReports.length).toEqual(1);
+  });
 });

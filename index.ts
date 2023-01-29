@@ -3,7 +3,7 @@ import fs from "fs";
 import calculateDecayScore from "./src/calculateDecayScore";
 import generateNpmViewPromises from "./src/generateNpmViewPromises";
 import generatePackageReport from "./src/generatePackageReport";
-import getDependenciesFromLockFile from "./src/getDependenciesFromLockFile";
+import getDependencies from "./src/getDependencies";
 import shouldExit from "./src/shouldExit";
 import { PackageVersionReport } from "./src/types/packageVersionReport.type";
 import { Report } from "./src/types/report";
@@ -25,16 +25,8 @@ if (!packageLockPath) {
   }
 }
 
-const dependencies = getDependenciesFromLockFile(
-  packageLockPath,
-  Boolean(process.env.ADD_DEV_DEPENDENCIES)
-);
-const packagesToSkip = JSON.parse(process.env.PACKAGES_TO_SKIP || "[]");
-
-const packagesWithVersionsPromises = generateNpmViewPromises(
-  dependencies,
-  packagesToSkip
-);
+const dependencies = getDependencies(packageLockPath);
+const packagesWithVersionsPromises = generateNpmViewPromises(dependencies);
 
 const reportConfig: ReportConfig = {
   skipMajorVersions: Boolean(process.env.SKIP_MAJOR_VERSIONS),
