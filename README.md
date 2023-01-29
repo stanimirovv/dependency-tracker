@@ -1,4 +1,3 @@
-TODO: add TRACK_ONLY to allow to track only specific packages.
 # Dependency tracker
 
 A light weight, configurable script that counts how many versions behind the project is from its dependencies.
@@ -37,6 +36,9 @@ You can also use `DECAY_THRESHOLD=<max decay score int>` to set a threshold for 
 By default only the prd dependencies are checked.
 You can also check dev dependencies by setting the envvar `CHECK_DEV_DEPENDENCIES=1`.
 
+You can use `PACKAGES_TO_SKIP='["package1", "package2"]'` to skip specific packages.
+The alternative is to use `PACKAGES_TO_TRACK='["package1", "package2"]'` to only track specific packages.
+
 ## Installation
 ```bash
 npm i @stanimirovv/dependency-tracker
@@ -68,3 +70,7 @@ PACKAGES_TO_SKIP='["typescript"]' npx @stanimirovv/dependency-tracker /path/to/p
 Have a max decay score of 10000 and skip minor versions:
 ```bash
 DECAY_THRESHOLD=10000 SKIP_MINOR_VERSIONS=1 npx @stanimirovv/dependency-tracker /path/to/package-lock.json
+
+## Work log
+29/01/2022 Some packages like TypeScript spam major versions. Should the script detect if the version is the same as the previous one and skip it?
+it can be found in dist-tags.latest from npm view
