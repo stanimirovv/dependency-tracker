@@ -8,14 +8,15 @@ export default function generateNpmViewPromises(
 ): Promise<PackageWithVersions>[] {
   return Object.keys(dependencies).map(async (packageName: string) => {
     try {
-      const { stdout } = await exec(`npm view ${packageName} versions --json`);
-
+      const { stdout } = await exec(`npm view ${packageName} --json`);
+      const parsedOutput = JSON.parse(stdout);
       // Clean up the package versions
       const currentVersion = dependencies[packageName];
       return {
         packageName,
-        versions: JSON.parse(stdout),
+        versions: parsedOutput.versions,
         currentVersion,
+        latestVersion: parsedOutput["dist-tags"].latest,
       };
     } catch (e) {
       console.error(`Error getting versions for ${packageName}, error: `, e);

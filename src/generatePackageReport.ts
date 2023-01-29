@@ -4,7 +4,7 @@ import { PackageWithVersions } from "./types/packageWithVersions.type";
 import { ReportConfig } from "./types/reportConfig.type";
 
 export default function generatePackageReport(
-  { versions, currentVersion, packageName }: PackageWithVersions,
+  { versions, currentVersion, packageName, latestVersion }: PackageWithVersions,
   reportConfig: ReportConfig
 ): PackageVersionReport {
   let minorVersionsBehind = 0;
@@ -32,24 +32,37 @@ export default function generatePackageReport(
     const hasBiggerPatchVersion =
       compareVersions(patchVersion, currentPatchVersion) === 1;
 
+    const isVersionAheadOfLatest =
+      compareVersions(currentMajorVersion, latestVersion) != -1;
+
     // Increment the versions behind
-    if (hasBiggerMajorVersion && !reportConfig.skipMajorVersions) {
+    const shouldIncrementMajor =
+      hasBiggerMajorVersion &&
+      !reportConfig.skipMajorVersions &&
+      !isVersionAheadOfLatest;
+    if (shouldIncrementMajor) {
       majorVersionsBehind++;
     }
 
-    if (hasBiggerMinorVersion && !reportConfig.skipMinorVersions) {
+    const shouldIncrementMinor =
+      hasBiggerMinorVersion &&
+      !reportConfig.skipMinorVersions &&
+      !isVersionAheadOfLatest;
+    if (shouldIncrementMinor) {
       minorVersionsBehind++;
     }
 
-    if (hasBiggerPatchVersion && !reportConfig.skipPatchVersions) {
+    const shouldIncrementPatch =
+      hasBiggerPatchVersion &&
+      !reportConfig.skipPatchVersions &&
+      !isVersionAheadOfLatest;
+    if (shouldIncrementPatch) {
       patchVersionsBehind++;
     }
 
     return version > currentVersion;
   });
 
-  const latestVersion =
-    versionsBehindArray.length > 0 ? versionsBehindArray[0] : currentVersion;
   const versionsBehind =
     minorVersionsBehind + patchVersionsBehind + majorVersionsBehind;
 
