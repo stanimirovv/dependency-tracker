@@ -17,7 +17,9 @@ export default function getDependencies(packageLockPath: string) {
 
     const mustSkip = dependenciesToSkip.indexOf(dependency) > -1;
 
-    if (mustSkip || mustSkipBecauseNotInToCheckList) {
+    const isLocalDependency = dependency.indexOf("file:") > -1;
+
+    if (mustSkip || mustSkipBecauseNotInToCheckList || isLocalDependency) {
       return;
     }
     filteredDependencies[dependency] = dependencies[dependency];
